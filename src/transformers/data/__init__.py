@@ -16,6 +16,7 @@ from .processors import (
     glue_output_modes,
     glue_processors,
     glue_tasks_num_labels,
+    custom_classifier_convert_examples_to_features,
     squad_convert_examples_to_features,
     xnli_output_modes,
     xnli_processors,
@@ -24,4 +25,5 @@ from .processors import (
 
 
 if is_sklearn_available():
-    from .metrics import glue_compute_metrics, xnli_compute_metrics
+    from .metrics import glue_compute_metrics, xnli_compute_metrics, acc_and_f1
+    

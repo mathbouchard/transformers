@@ -56,6 +56,7 @@ from .data import (
     glue_output_modes,
     glue_processors,
     glue_tasks_num_labels,
+    custom_classifier_convert_examples_to_features,
     is_sklearn_available,
     squad_convert_examples_to_features,
     xnli_output_modes,
@@ -153,7 +154,7 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
 if is_sklearn_available():
-    from .data import glue_compute_metrics, xnli_compute_metrics
+    from .data import glue_compute_metrics, xnli_compute_metrics, acc_and_f1
 
 
 # Modeling
@@ -354,7 +355,9 @@ if is_torch_available():
     # Trainer
     from .trainer import Trainer, set_seed, torch_distributed_zero_first, EvalPrediction
     from .data.data_collator import DefaultDataCollator, DataCollator, DataCollatorForLanguageModeling
-    from .data.datasets import GlueDataset, TextDataset, LineByLineTextDataset, GlueDataTrainingArguments
+    from .data.datasets import (GlueDataset, TextDataset, LineByLineTextDataset, GlueDataTrainingArguments, 
+                                CustomClassifierDataset, CustomClassifierDataTrainingArguments)
+    
 
     # Benchmarks
     from .benchmark import PyTorchBenchmark, PyTorchBenchmarkArguments
