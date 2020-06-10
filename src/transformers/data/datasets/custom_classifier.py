@@ -86,7 +86,7 @@ class CustomClassifierDataset(Dataset):
         self.get_data = get_data
         self.get_labels = get_labels
         self.custom_info = custom_info
-        self.separator = seperator
+        self.separator = separator
         if isinstance(mode, str):
             try:
                 mode = Split[mode]
