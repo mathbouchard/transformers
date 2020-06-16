@@ -116,18 +116,14 @@ class CustomClassifierDataset(Dataset):
             else:
                 logger.info(f"Creating features from dataset file at {args.data_dir}")
 
-                if mode == Split.dev:
-                    examples = get_data(args, custom_info)
-                elif mode == Split.test:
-                    examples = get_data(args, custom_info)
-                else:
-                    examples = get_data(args, custom_info)
+                examples = get_data(args, custom_info)
                 if limit_length is not None:
                     examples = examples[:limit_length]
                 self.features = custom_classifier_convert_examples_to_features(
                     examples,
                     tokenizer,
                     separator,
+                    custom_info,
                     max_length=args.max_seq_length,
                     label_list=self.label_list,
                     output_mode=self.output_mode,

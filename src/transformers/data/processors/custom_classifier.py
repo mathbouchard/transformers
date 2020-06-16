@@ -35,6 +35,7 @@ def custom_classifier_convert_examples_to_features(
     examples: Union[List[InputExample], "tf.data.Dataset"],
     tokenizer: PreTrainedTokenizer,
     separator: str,
+    custom_info: dict,
     max_length: int,
     task=None,
     label_list=None,
@@ -58,16 +59,16 @@ def custom_classifier_convert_examples_to_features(
 
     """
     if is_tf_available() and isinstance(examples, tf.data.Dataset):
-        return _tf_custom_classifier_convert_examples_to_features(examples, tokenizer, separator, max_length=max_length, task=task)
+        return _tf_custom_classifier_convert_examples_to_features(examples, tokenizer, separator, custom_info, max_length=max_length, task=task)
     return _custom_classifier_convert_examples_to_features(
-        examples, tokenizer, separator, max_length=max_length, task=task, label_list=label_list, output_mode=output_mode
+        examples, tokenizer, separator, custom_info, max_length=max_length, task=task, label_list=label_list, output_mode=output_mode
     )
 
 
 if is_tf_available():
 
     def _tf_custom_classifier_convert_examples_to_features(
-        examples: tf.data.Dataset, tokenizer: PreTrainedTokenizer, separator: str, task=str, max_length: Optional[int] = None,
+        examples: tf.data.Dataset, tokenizer: PreTrainedTokenizer, separator: str, custom_info: dict, task=str, max_length: Optional[int] = None,
     ) -> tf.data.Dataset:
         """
         Returns:
@@ -84,7 +85,7 @@ if is_tf_available():
             )
         processor = DataProcessor()
         examples = [processor.tfds_map(get_example_from_tensor_dict(example)) for example in examples]
-        features = custom_classifier_convert_examples_to_features(examples, tokenizer, separator, max_length=max_length, task=task)
+        features = custom_classifier_convert_examples_to_features(examples, tokenizer, separator, custom_info, max_length=max_length, task=task)
 
         def gen():
             for ex in features:
@@ -114,6 +115,7 @@ def _custom_classifier_convert_examples_to_features(
     examples: List[InputExample],
     tokenizer: PreTrainedTokenizer,
     separator: str,
+    custom_info: dict,
     max_length: int,
     task=None,
     label_list=None,
@@ -130,23 +132,31 @@ def _custom_classifier_convert_examples_to_features(
     labels = [label_from_example(example) for example in examples]
 
     def get_sentence_parts(example):
-        text_to_classify_tokens = (example['text_to_classify']+" "+separator).split()
-        if(len(text_to_classify_tokens) > max_length):
-            text_to_classify_tokens = text_to_classify_tokens[:max_length-1]+[separator]
+    
+        if custom_info.get("used_start", False):
+            text_to_classify_tokens = ("start "+example['text_to_classify']).split()[:max_length]
+        else:
+            text_to_classify_tokens = (example['text_to_classify']+" "+separator).split()
+            if(len(text_to_classify_tokens) > max_length):
+                text_to_classify_tokens = text_to_classify_tokens[:max_length-1]+[separator]
         prefix_context_tokens = (example["prefix_context"]+" "+separator).split()
         suffix_context_tokens = example["suffix_context"].split()
 
         remaining_length = max_length - len(text_to_classify_tokens)
         
-        if len(suffix_context_tokens) < remaining_length//2:
-            length_2 = len(suffix_context_tokens)
-            length_1 = remaining_length-length_2
-        elif len(prefix_context_tokens) < remaining_length//2:
-            length_1 = len(prefix_context_tokens)
-            length_2 = remaining_length-length_1
+        if "fixed_length" in custom_info:
+            length_1 = custom_info["fixed_length"][0]
+            length_2 = custom_info["fixed_length"][1]
         else:
-            length_1 = remaining_length//2
-            length_2 = remaining_length//2
+            if len(suffix_context_tokens) < remaining_length//2:
+                length_2 = len(suffix_context_tokens)
+                length_1 = remaining_length-length_2
+            elif len(prefix_context_tokens) < remaining_length//2:
+                length_1 = len(prefix_context_tokens)
+                length_2 = remaining_length-length_1
+            else:
+                length_1 = remaining_length//2
+                length_2 = remaining_length//2
         return (' '.join(prefix_context_tokens[-length_1:]).strip(),
                 ' '.join(text_to_classify_tokens+suffix_context_tokens[:length_2]).strip())
     
