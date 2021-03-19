@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
@@ -33,7 +34,13 @@ from transformers import (
     TFTrainingArguments,
     set_seed,
 )
+from transformers.utils import logging as hf_logging
 from utils_multiple_choice import Split, TFMultipleChoiceDataset, processors
+
+
+hf_logging.set_verbosity_info()
+hf_logging.enable_default_handler()
+hf_logging.enable_explicit_format()
 
 
 logger = logging.getLogger(__name__)
@@ -59,7 +66,8 @@ class ModelArguments:
         default=None, metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
     )
     cache_dir: Optional[str] = field(
-        default=None, metadata={"help": "Where do you want to store the pretrained models downloaded from s3"}
+        default=None,
+        metadata={"help": "Where do you want to store the pretrained models downloaded from huggingface.co"},
     )
 
 
@@ -108,7 +116,10 @@ def main():
         level=logging.INFO,
     )
     logger.warning(
-        "device: %s, n_gpu: %s, 16-bits training: %s", training_args.device, training_args.n_gpu, training_args.fp16,
+        "device: %s, n_replicas: %s, 16-bits training: %s",
+        training_args.device,
+        training_args.n_replicas,
+        training_args.fp16,
     )
     logger.info("Training/evaluation parameters %s", training_args)
 

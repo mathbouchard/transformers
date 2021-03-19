@@ -1,27 +1,26 @@
-# This test is meant to be run in torch.distributed,
-# on a machine with multiple GPUs, in the following way:
+# Copyright 2020 The HuggingFace Team. All rights reserved.
 #
-#   python -m torch.distributed.launch --nproc_per_node 2 ./tests/test_trainer_distributed.py
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Replace 2 with the number of GPUs you have.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# You can also run it as a standalone file to test identical behavior in nn.DataParallel:
-#   python ./tests/test_trainer_distributed.py
-# and in single-GPU mode:
-#   CUDA_VISIBLE_DEVICES=0 python ./tests/test_trainer_distributed.py
-# and in CPU mode:
-#   CUDA_VISIBLE_DEVICES=-1 python ./tests/test_trainer_distributed.py
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-
-import logging
 import sys
 from typing import Dict
 
 from transformers import EvalPrediction, HfArgumentParser, TrainingArguments, is_torch_available
+from transformers.testing_utils import TestCasePlus, execute_subprocess_async, require_torch_multi_gpu
+from transformers.utils import logging
 
 
-logger = logging.getLogger(__name__)
+logger = logging.get_logger(__name__)
 
 
 if is_torch_available():
@@ -29,7 +28,7 @@ if is_torch_available():
     from torch import nn
     from torch.utils.data.dataset import Dataset
 
-    from transformers import DataCollator, Trainer
+    from transformers import Trainer
 
     class DummyDataset(Dataset):
         def __init__(self, length: int = 101):
@@ -41,8 +40,8 @@ if is_torch_available():
         def __getitem__(self, i) -> int:
             return i
 
-    class DummyDataCollator(DataCollator):
-        def collate_batch(self, features):
+    class DummyDataCollator:
+        def __call__(self, features):
             return {"input_ids": torch.tensor(features), "labels": torch.tensor(features)}
 
     class DummyModel(nn.Module):
@@ -58,11 +57,30 @@ if is_torch_available():
                 return input_ids
 
 
-if __name__ == "__main__":
-    parser = HfArgumentParser((TrainingArguments,))
-    training_args = parser.parse_args_into_dataclasses(sys.argv + ["--output_dir", "./examples"])[0]
+class TestTrainerDistributed(TestCasePlus):
+    @require_torch_multi_gpu
+    def test_trainer(self):
 
-    logging.basicConfig(level=logging.INFO)
+        distributed_args = f"""
+            -m torch.distributed.launch
+            --nproc_per_node={torch.cuda.device_count()}
+            {self.test_file_dir}/test_trainer_distributed.py
+        """.split()
+        output_dir = self.get_auto_remove_tmp_dir()
+        args = f"--output_dir {output_dir}".split()
+        cmd = [sys.executable] + distributed_args + args
+        execute_subprocess_async(cmd, env=self.get_env())
+        # successful return here == success - any errors would have caused an error in the sub-call
+
+
+if __name__ == "__main__":
+    # The script below is meant to be run under torch.distributed, on a machine with multiple GPUs:
+    #
+    # PYTHONPATH="src" python -m torch.distributed.launch --nproc_per_node 2 --output_dir output_dir ./tests/test_trainer_distributed.py
+
+    parser = HfArgumentParser((TrainingArguments,))
+    training_args = parser.parse_args_into_dataclasses()[0]
+
     logger.warning(
         "Process rank: %s, device: %s, n_gpu: %s, distributed training: %s",
         training_args.local_rank,
@@ -71,15 +89,19 @@ if __name__ == "__main__":
         training_args.local_rank != -1,
     )
 
-    # Essentially, what we want to verify in the distributed case is
-    # that we get all samples back, in the right order.
-    # (this is crucial for prediction for instance)
+    # Essentially, what we want to verify in the distributed case is that we get all samples back,
+    # in the right order. (this is crucial for prediction for instance)
     for dataset_length in [101, 40, 7]:
         dataset = DummyDataset(dataset_length)
 
         def compute_metrics(p: EvalPrediction) -> Dict:
             sequential = list(range(len(dataset)))
             success = p.predictions.tolist() == sequential and p.label_ids.tolist() == sequential
+            if not success and training_args.local_rank == 0:
+                logger.warning(
+                    "Predictions and/or labels do not match expected results:\n  - predictions: "
+                    f"{p.predictions.tolist()}\n  - labels: {p.label_ids.tolist()}\n  - expected: {sequential}"
+                )
             return {"success": success}
 
         trainer = Trainer(
@@ -101,4 +123,18 @@ if __name__ == "__main__":
             logger.error(p.metrics)
             exit(1)
 
-    logger.info("🔥 All distributed tests successful")
+        trainer.args.eval_accumulation_steps = 2
+
+        metrics = trainer.evaluate()
+        logger.info(metrics)
+        if metrics["eval_success"] is not True:
+            logger.error(metrics)
+            exit(1)
+
+        p = trainer.predict(dataset)
+        logger.info(p.metrics)
+        if p.metrics["eval_success"] is not True:
+            logger.error(p.metrics)
+            exit(1)
+
+        trainer.args.eval_accumulation_steps = None

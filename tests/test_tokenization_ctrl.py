@@ -17,7 +17,7 @@ import json
 import os
 import unittest
 
-from transformers.tokenization_ctrl import VOCAB_FILES_NAMES, CTRLTokenizer
+from transformers.models.ctrl.tokenization_ctrl import VOCAB_FILES_NAMES, CTRLTokenizer
 
 from .test_tokenization_common import TokenizerTesterMixin
 
@@ -25,6 +25,8 @@ from .test_tokenization_common import TokenizerTesterMixin
 class CTRLTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
 
     tokenizer_class = CTRLTokenizer
+    test_rust_tokenizer = False
+    test_seq2seq = False
 
     def setUp(self):
         super().setUp()
@@ -46,7 +48,7 @@ class CTRLTokenizationTest(TokenizerTesterMixin, unittest.TestCase):
         kwargs.update(self.special_tokens_map)
         return CTRLTokenizer.from_pretrained(self.tmpdirname, **kwargs)
 
-    def get_input_output_texts(self):
+    def get_input_output_texts(self, tokenizer):
         input_text = "adapt react readapt apt"
         output_text = "adapt react readapt apt"
         return input_text, output_text
