@@ -29,8 +29,9 @@ from ..bert.modeling_flax_bert import (
     FlaxBertModel,
 )
 from ..roberta.modeling_flax_roberta import FlaxRobertaModel
+from ..bridgeformer.modeling_flax_bridgeformer import FlaxBridgeformerModel
 from .auto_factory import auto_class_factory
-from .configuration_auto import BertConfig, RobertaConfig
+from .configuration_auto import BertConfig, RobertaConfig, BridgeformerConfig
 
 
 logger = logging.get_logger(__name__)
@@ -41,6 +42,7 @@ FLAX_MODEL_MAPPING = OrderedDict(
         # Base model mapping
         (RobertaConfig, FlaxRobertaModel),
         (BertConfig, FlaxBertModel),
+        (BridgeformerConfig, FlaxBridgeformerModel),
     ]
 )
 

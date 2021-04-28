@@ -674,6 +674,7 @@ SLOW_TO_FAST_CONVERTERS = {
     "ReformerTokenizer": ReformerConverter,
     "RetriBertTokenizer": BertConverter,
     "RobertaTokenizer": RobertaConverter,
+    "BridgeformerTokenizer": RobertaConverter,
     "SqueezeBertTokenizer": BertConverter,
     "T5Tokenizer": T5Converter,
     "XLMRobertaTokenizer": XLMRobertaConverter,

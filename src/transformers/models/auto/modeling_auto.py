@@ -230,6 +230,15 @@ from ..roberta.modeling_roberta import (
     RobertaForTokenClassification,
     RobertaModel,
 )
+from ..bridgeformer.modeling_bridgeformer import (
+    BridgeformerForCausalLM,
+    BridgeformerForMaskedLM,
+    BridgeformerForMultipleChoice,
+    BridgeformerForQuestionAnswering,
+    BridgeformerForSequenceClassification,
+    BridgeformerForTokenClassification,
+    BridgeformerModel,
+)
 from ..speech_to_text.modeling_speech_to_text import Speech2TextForConditionalGeneration, Speech2TextModel
 from ..squeezebert.modeling_squeezebert import (
     SqueezeBertForMaskedLM,
@@ -320,6 +329,7 @@ from .configuration_auto import (
     ReformerConfig,
     RetriBertConfig,
     RobertaConfig,
+    BridgeformerConfig,
     Speech2TextConfig,
     SqueezeBertConfig,
     T5Config,
@@ -390,6 +400,7 @@ MODEL_MAPPING = OrderedDict(
         (TapasConfig, TapasModel),
         (MarianConfig, MarianModel),
         (IBertConfig, IBertModel),
+        (BridgeformerConfig, BridgeformerModel),
     ]
 )
 
@@ -427,6 +438,7 @@ MODEL_FOR_PRETRAINING_MAPPING = OrderedDict(
         (IBertConfig, IBertForMaskedLM),
         (DebertaConfig, DebertaForMaskedLM),
         (DebertaV2Config, DebertaV2ForMaskedLM),
+        (BridgeformerConfig, BridgeformerForMaskedLM),
     ]
 )
 
@@ -473,6 +485,7 @@ MODEL_WITH_LM_HEAD_MAPPING = OrderedDict(
         (DebertaV2Config, DebertaV2ForMaskedLM),
         (IBertConfig, IBertForMaskedLM),
         (MegatronBertConfig, MegatronBertForCausalLM),
+        (BridgeformerConfig, BridgeformerForMaskedLM),
     ]
 )
 
@@ -505,6 +518,7 @@ MODEL_FOR_CAUSAL_LM_MAPPING = OrderedDict(
         (BlenderbotConfig, BlenderbotForCausalLM),
         (BlenderbotSmallConfig, BlenderbotSmallForCausalLM),
         (MegatronBertConfig, MegatronBertForCausalLM),
+        (BridgeformerConfig, BridgeformerForCausalLM),
     ]
 )
 
@@ -544,6 +558,7 @@ MODEL_FOR_MASKED_LM_MAPPING = OrderedDict(
         (DebertaConfig, DebertaForMaskedLM),
         (DebertaV2Config, DebertaV2ForMaskedLM),
         (IBertConfig, IBertForMaskedLM),
+        (BridgeformerConfig, BridgeformerForMaskedLM),
     ]
 )
 
@@ -601,6 +616,7 @@ MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING = OrderedDict(
         (MPNetConfig, MPNetForSequenceClassification),
         (TapasConfig, TapasForSequenceClassification),
         (IBertConfig, IBertForSequenceClassification),
+        (BridgeformerConfig, BridgeformerForSequenceClassification),
     ]
 )
 
@@ -633,6 +649,7 @@ MODEL_FOR_QUESTION_ANSWERING_MAPPING = OrderedDict(
         (DebertaConfig, DebertaForQuestionAnswering),
         (DebertaV2Config, DebertaV2ForQuestionAnswering),
         (IBertConfig, IBertForQuestionAnswering),
+        (BridgeformerConfig, BridgeformerForQuestionAnswering),
     ]
 )
 
@@ -669,6 +686,7 @@ MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING = OrderedDict(
         (DebertaConfig, DebertaForTokenClassification),
         (DebertaV2Config, DebertaV2ForTokenClassification),
         (IBertConfig, IBertForTokenClassification),
+        (BridgeformerConfig, BridgeformerForTokenClassification),
     ]
 )
 
@@ -694,6 +712,7 @@ MODEL_FOR_MULTIPLE_CHOICE_MAPPING = OrderedDict(
         (FunnelConfig, FunnelForMultipleChoice),
         (MPNetConfig, MPNetForMultipleChoice),
         (IBertConfig, IBertForMultipleChoice),
+        (BridgeformerConfig, BridgeformerForMultipleChoice),
     ]
 )
 

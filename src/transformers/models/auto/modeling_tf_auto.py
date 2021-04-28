@@ -148,6 +148,14 @@ from ..roberta.modeling_tf_roberta import (
     TFRobertaForTokenClassification,
     TFRobertaModel,
 )
+from ..bridgeformer.modeling_tf_bridgeformer import (
+    TFBridgeformerForMaskedLM,
+    TFBridgeformerForMultipleChoice,
+    TFBridgeformerForQuestionAnswering,
+    TFBridgeformerForSequenceClassification,
+    TFBridgeformerForTokenClassification,
+    TFBridgeformerModel,
+)
 from ..t5.modeling_tf_t5 import TFT5ForConditionalGeneration, TFT5Model
 from ..transfo_xl.modeling_tf_transfo_xl import (
     TFTransfoXLForSequenceClassification,
@@ -206,6 +214,7 @@ from .configuration_auto import (
     OpenAIGPTConfig,
     PegasusConfig,
     RobertaConfig,
+    BridgeformerConfig,
     T5Config,
     TransfoXLConfig,
     XLMConfig,
@@ -252,6 +261,7 @@ TF_MODEL_MAPPING = OrderedDict(
         (PegasusConfig, TFPegasusModel),
         (BlenderbotConfig, TFBlenderbotModel),
         (BlenderbotSmallConfig, TFBlenderbotSmallModel),
+        (BridgeformerConfig, TFBridgeformerModel),
     ]
 )
 
@@ -279,6 +289,7 @@ TF_MODEL_FOR_PRETRAINING_MAPPING = OrderedDict(
         (ElectraConfig, TFElectraForPreTraining),
         (FunnelConfig, TFFunnelForPreTraining),
         (MPNetConfig, TFMPNetForMaskedLM),
+        (BridgeformerConfig, TFBridgeformerForMaskedLM),
     ]
 )
 
@@ -309,6 +320,7 @@ TF_MODEL_WITH_LM_HEAD_MAPPING = OrderedDict(
         (ElectraConfig, TFElectraForMaskedLM),
         (FunnelConfig, TFFunnelForMaskedLM),
         (MPNetConfig, TFMPNetForMaskedLM),
+        (BridgeformerConfig, TFBridgeformerForMaskedLM),
     ]
 )
 
@@ -346,6 +358,7 @@ TF_MODEL_FOR_MASKED_LM_MAPPING = OrderedDict(
         (ElectraConfig, TFElectraForMaskedLM),
         (FunnelConfig, TFFunnelForMaskedLM),
         (MPNetConfig, TFMPNetForMaskedLM),
+        (BridgeformerConfig, TFBridgeformerForMaskedLM),
     ]
 )
 
@@ -388,6 +401,7 @@ TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING = OrderedDict(
         (OpenAIGPTConfig, TFOpenAIGPTForSequenceClassification),
         (TransfoXLConfig, TFTransfoXLForSequenceClassification),
         (CTRLConfig, TFCTRLForSequenceClassification),
+        (BridgeformerConfig, TFBridgeformerForSequenceClassification),
     ]
 )
 
@@ -409,6 +423,7 @@ TF_MODEL_FOR_QUESTION_ANSWERING_MAPPING = OrderedDict(
         (ElectraConfig, TFElectraForQuestionAnswering),
         (FunnelConfig, TFFunnelForQuestionAnswering),
         (MPNetConfig, TFMPNetForQuestionAnswering),
+        (BridgeformerConfig, TFBridgeformerForQuestionAnswering),
     ]
 )
 
@@ -431,6 +446,7 @@ TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING = OrderedDict(
         (ElectraConfig, TFElectraForTokenClassification),
         (FunnelConfig, TFFunnelForTokenClassification),
         (MPNetConfig, TFMPNetForTokenClassification),
+        (BridgeformerConfig, TFBridgeformerForTokenClassification),
     ]
 )
 
@@ -452,6 +468,7 @@ TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING = OrderedDict(
         (ElectraConfig, TFElectraForMultipleChoice),
         (FunnelConfig, TFFunnelForMultipleChoice),
         (MPNetConfig, TFMPNetForMultipleChoice),
+        (BridgeformerConfig, TFBridgeformerForMultipleChoice),
     ]
 )
 

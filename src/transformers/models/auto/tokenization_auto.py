@@ -50,6 +50,7 @@ from ..prophetnet.tokenization_prophetnet import ProphetNetTokenizer
 from ..rag.tokenization_rag import RagTokenizer
 from ..retribert.tokenization_retribert import RetriBertTokenizer
 from ..roberta.tokenization_roberta import RobertaTokenizer
+from ..bridgeformer.tokenization_bridgeformer import BridgeformerTokenizer
 from ..squeezebert.tokenization_squeezebert import SqueezeBertTokenizer
 from ..tapas.tokenization_tapas import TapasTokenizer
 from ..transfo_xl.tokenization_transfo_xl import TransfoXLTokenizer
@@ -177,6 +178,7 @@ if is_tokenizers_available():
     from ..reformer.tokenization_reformer_fast import ReformerTokenizerFast
     from ..retribert.tokenization_retribert_fast import RetriBertTokenizerFast
     from ..roberta.tokenization_roberta_fast import RobertaTokenizerFast
+    from ..bridgeformer.tokenization_bridgeformer_fast import BridgeformerTokenizerFast
     from ..squeezebert.tokenization_squeezebert_fast import SqueezeBertTokenizerFast
     from ..t5.tokenization_t5_fast import T5TokenizerFast
     from ..xlm_roberta.tokenization_xlm_roberta_fast import XLMRobertaTokenizerFast

@@ -61,6 +61,7 @@ from ..rag.configuration_rag import RagConfig
 from ..reformer.configuration_reformer import ReformerConfig
 from ..retribert.configuration_retribert import RETRIBERT_PRETRAINED_CONFIG_ARCHIVE_MAP, RetriBertConfig
 from ..roberta.configuration_roberta import ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP, RobertaConfig
+from ..bridgeformer.configuration_bridgeformer import BRIDGEFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP, BridgeformerConfig
 from ..speech_to_text.configuration_speech_to_text import (
     SPEECH_TO_TEXT_PRETRAINED_CONFIG_ARCHIVE_MAP,
     Speech2TextConfig,
@@ -105,6 +106,7 @@ ALL_PRETRAINED_CONFIG_ARCHIVE_MAP = dict(
         XLNET_PRETRAINED_CONFIG_ARCHIVE_MAP,
         XLM_PRETRAINED_CONFIG_ARCHIVE_MAP,
         ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP,
+        BRIDGEFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP,
         DISTILBERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
         ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
         CAMEMBERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
@@ -164,6 +166,7 @@ CONFIG_MAPPING = OrderedDict(
         ("reformer", ReformerConfig),
         ("longformer", LongformerConfig),
         ("roberta", RobertaConfig),
+        ("bridgeformer", BridgeformerConfig),
         ("deberta-v2", DebertaV2Config),
         ("deberta", DebertaConfig),
         ("flaubert", FlaubertConfig),
@@ -219,6 +222,7 @@ MODEL_NAMES_MAPPING = OrderedDict(
         ("reformer", "Reformer"),
         ("longformer", "Longformer"),
         ("roberta", "RoBERTa"),
+        ("bridgeformer", "Bridgeformer"),
         ("flaubert", "FlauBERT"),
         ("fsmt", "FairSeq Machine-Translation"),
         ("squeezebert", "SqueezeBERT"),

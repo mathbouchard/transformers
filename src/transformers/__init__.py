@@ -205,6 +205,7 @@ _import_structure = {
     "models.reformer": ["REFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP", "ReformerConfig"],
     "models.retribert": ["RETRIBERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "RetriBertConfig", "RetriBertTokenizer"],
     "models.roberta": ["ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP", "RobertaConfig", "RobertaTokenizer"],
+    "models.bridgeformer": ["BRIDGEFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP", "BridgeformerConfig", "BridgeformerTokenizer"],
     "models.speech_to_text": [
         "SPEECH_TO_TEXT_PRETRAINED_CONFIG_ARCHIVE_MAP",
         "Speech2TextConfig",
@@ -335,6 +336,7 @@ if is_tokenizers_available():
     _import_structure["models.reformer"].append("ReformerTokenizerFast")
     _import_structure["models.retribert"].append("RetriBertTokenizerFast")
     _import_structure["models.roberta"].append("RobertaTokenizerFast")
+    _import_structure["models.bridgeformer"].append("BridgeformerTokenizerFast")
     _import_structure["models.squeezebert"].append("SqueezeBertTokenizerFast")
     _import_structure["models.t5"].append("T5TokenizerFast")
     _import_structure["models.xlm_roberta"].append("XLMRobertaTokenizerFast")
@@ -865,6 +867,18 @@ if is_torch_available():
             "RobertaModel",
         ]
     )
+    _import_structure["models.bridgeformer"].extend(
+        [
+            "BRIDGEFORMER_PRETRAINED_MODEL_ARCHIVE_LIST",
+            "BridgeformerForCausalLM",
+            "BridgeformerForMaskedLM",
+            "BridgeformerForMultipleChoice",
+            "BridgeformerForQuestionAnswering",
+            "BridgeformerForSequenceClassification",
+            "BridgeformerForTokenClassification",
+            "BridgeformerModel",
+        ]
+    )
     _import_structure["models.speech_to_text"].extend(
         [
             "SPEECH_TO_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST",
@@ -1277,6 +1291,19 @@ if is_tf_available():
             "TFRobertaPreTrainedModel",
         ]
     )
+    _import_structure["models.bridgeformer"].extend(
+        [
+            "TF_BRIDGEFORMER_PRETRAINED_MODEL_ARCHIVE_LIST",
+            "TFBridgeformerForMaskedLM",
+            "TFBridgeformerForMultipleChoice",
+            "TFBridgeformerForQuestionAnswering",
+            "TFBridgeformerForSequenceClassification",
+            "TFBridgeformerForTokenClassification",
+            "TFBridgeformerMainLayer",
+            "TFBridgeformerModel",
+            "TFBridgeformerPreTrainedModel",
+        ]
+    )
     _import_structure["models.t5"].extend(
         [
             "TF_T5_PRETRAINED_MODEL_ARCHIVE_LIST",
@@ -1379,6 +1406,7 @@ if is_flax_available():
         ]
     )
     _import_structure["models.roberta"].append("FlaxRobertaModel")
+    _import_structure["models.bridgeformer"].append("FlaxBridgeformerModel")
 else:
     from .utils import dummy_flax_objects
 
@@ -1544,6 +1572,7 @@ if TYPE_CHECKING:
     from .models.reformer import REFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP, ReformerConfig
     from .models.retribert import RETRIBERT_PRETRAINED_CONFIG_ARCHIVE_MAP, RetriBertConfig, RetriBertTokenizer
     from .models.roberta import ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP, RobertaConfig, RobertaTokenizer
+    from .models.bridgeformer import BRIDGEFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP, BridgeformerConfig, BridgeformerTokenizer
     from .models.speech_to_text import SPEECH_TO_TEXT_PRETRAINED_CONFIG_ARCHIVE_MAP, Speech2TextConfig
     from .models.squeezebert import SQUEEZEBERT_PRETRAINED_CONFIG_ARCHIVE_MAP, SqueezeBertConfig, SqueezeBertTokenizer
     from .models.t5 import T5_PRETRAINED_CONFIG_ARCHIVE_MAP, T5Config
@@ -1665,6 +1694,7 @@ if TYPE_CHECKING:
         from .models.reformer import ReformerTokenizerFast
         from .models.retribert import RetriBertTokenizerFast
         from .models.roberta import RobertaTokenizerFast
+        from .models.bridgeformer import BridgeformerTokenizerFast
         from .models.squeezebert import SqueezeBertTokenizerFast
         from .models.t5 import T5TokenizerFast
         from .models.xlm_roberta import XLMRobertaTokenizerFast
@@ -2097,6 +2127,16 @@ if TYPE_CHECKING:
             RobertaForTokenClassification,
             RobertaModel,
         )
+        from .models.bridgeformer import (
+            BRIDGEFORMER_PRETRAINED_MODEL_ARCHIVE_LIST,
+            BridgeformerForCausalLM,
+            BridgeformerForMaskedLM,
+            BridgeformerForMultipleChoice,
+            BridgeformerForQuestionAnswering,
+            BridgeformerForSequenceClassification,
+            BridgeformerForTokenClassification,
+            BridgeformerModel,
+        )
         from .models.speech_to_text import (
             SPEECH_TO_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST,
             Speech2TextForConditionalGeneration,
@@ -2440,6 +2480,17 @@ if TYPE_CHECKING:
             TFRobertaModel,
             TFRobertaPreTrainedModel,
         )
+        from .models.bridgeformer import (
+            TF_BRIDGEFORMER_PRETRAINED_MODEL_ARCHIVE_LIST,
+            TFBridgeformerForMaskedLM,
+            TFBridgeformerForMultipleChoice,
+            TFBridgeformerForQuestionAnswering,
+            TFBridgeformerForSequenceClassification,
+            TFBridgeformerForTokenClassification,
+            TFBridgeformerMainLayer,
+            TFBridgeformerModel,
+            TFBridgeformerPreTrainedModel,
+        )
         from .models.t5 import (
             TF_T5_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFT5EncoderModel,
@@ -2531,6 +2582,7 @@ if TYPE_CHECKING:
             FlaxBertPreTrainedModel,
         )
         from .models.roberta import FlaxRobertaModel
+        from .models.bridgeformer import FlaxBridgeformerModel
     else:
         # Import the same objects as dummies to get them in the namespace.
         # They will raise an import error if the user tries to instantiate / use them.
